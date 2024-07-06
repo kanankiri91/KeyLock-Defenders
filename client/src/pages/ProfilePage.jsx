@@ -15,7 +15,8 @@ const ProfilePage = () => {
   const [name, setName] = useState('');
   const [token, setToken] = useState('');
   const [expire, setExpire] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // State untuk indikator loading
+  const [isLoading, setIsLoading] = useState(false); 
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const navigateTo = useNavigate();
 
   useEffect(() => {
@@ -24,7 +25,7 @@ const ProfilePage = () => {
 
   const refreshToken = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/token');
+      const response = await axios.get(`${BACKEND_URL}/token`);
       setToken(response.data.accessToken);
       const decoded = jwtDecode(response.data.accessToken);
       setName(decoded.name);
@@ -40,7 +41,7 @@ const ProfilePage = () => {
   axiosJWT.interceptors.request.use(async (config) => {
     const currentDate = new Date();
     if (expire * 1000 < currentDate.getTime()) {
-      const response = await axios.get('http://localhost:5000/token');
+      const response = await axios.get(`${BACKEND_URL}/token`);
       config.headers.Authorization = `Bearer ${response.data.accessToken}`;
       setToken(response.data.accessToken);
       const decoded = jwtDecode(response.data.accessToken);
@@ -58,7 +59,7 @@ const ProfilePage = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await axiosJWT.get('http://localhost:5000/profile');
+      const response = await axiosJWT.get(`${BACKEND_URL}/profile`);
       setUser(response.data.userProfile);
       setDataAkunValues(response.data.dataAkunValues);
     } catch (error) {
@@ -71,7 +72,7 @@ const ProfilePage = () => {
     e.preventDefault();
     setIsLoading(true); // Aktifkan indikator loading sebelum permintaan
     try {
-      await axiosJWT.put('http://localhost:5000/profile/fullname', { fullname: newFullname });
+      await axiosJWT.put(`${BACKEND_URL}/profile/fullname`, { fullname: newFullname });
       Swal.fire({
         title: 'Success',
         text: 'Fullname updated successfully',
@@ -98,7 +99,7 @@ const ProfilePage = () => {
     e.preventDefault();
     setIsLoading(true); // Aktifkan indikator loading sebelum permintaan
     try {
-      await axiosJWT.put('http://localhost:5000/profile/email', { email: newEmail });
+      await axiosJWT.put(`${BACKEND_URL}/profile/email`, { email: newEmail });
       Swal.fire({
         title: 'Success',
         text: 'Email updated successfully',
@@ -125,7 +126,7 @@ const ProfilePage = () => {
     e.preventDefault();
     setIsLoading(true); // Aktifkan indikator loading sebelum permintaan
     try {
-      await axiosJWT.put('http://localhost:5000/profile/password', { oldPassword, newPassword });
+      await axiosJWT.put(`${BACKEND_URL}/profile/password`, { oldPassword, newPassword });
       Swal.fire({
         title: 'Success',
         text: 'Password updated successfully',
@@ -152,7 +153,7 @@ const ProfilePage = () => {
   const handleUpdateKeterangan = async (id, currentKeterangan) => {
     setIsLoading(true);
     try {
-      await axiosJWT.put('http://localhost:5000/update-keterangan', {
+      await axiosJWT.put(`${BACKEND_URL}/update-keterangan`, {
         id,
         keterangan: currentKeterangan === 1 ? 0 : 1
       });

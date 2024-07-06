@@ -8,10 +8,11 @@ const CekBreachPage = () => {
     const [whatsapp, setWhatsapp] = useState('');
     const [breachInfo, setBreachInfo] = useState([]);
     const [isSearched, setIsSearched] = useState(false);
+    const backendUrl = import.meta.env.VITE_BACKEND_URL; // gunakan environment variable
 
     const handleSearch = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/breach-info', {
+            const response = await axios.post(`${backendUrl}/breach-info`, {
                 email,
                 whatsapp
             });
@@ -61,11 +62,10 @@ const CekBreachPage = () => {
             }
         });
     };
-     
-    
+
     const handleUpdateKeterangan = async (id, keterangan) => {
         try {
-            await axios.post('http://localhost:5000/update-keterangan', {
+            await axios.post(`${backendUrl}/update-keterangan`, {
                 id,
                 keterangan: keterangan === 1 ? 0 : 1
             });

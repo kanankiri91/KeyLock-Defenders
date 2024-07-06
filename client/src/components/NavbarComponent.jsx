@@ -10,6 +10,7 @@ const NavbarComponent = () => {
     const [changeColor, setChangeColor] = useState(false);
     const [buttonColor, setButtonColor] = useState("btn btn-outline-light rounded-2");
     const navigateTo = useNavigate();
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     const changeBackgroundColor = () => {
         if (window.scrollY > 10) {
@@ -33,7 +34,7 @@ const NavbarComponent = () => {
 
     const Logout = async() =>{
         try {
-            await axios.delete('http://localhost:5000/keluar')
+            await axios.delete(`${backendUrl}/keluar`)
             navigateTo('/login')
         } catch (error) {
             console.log(error)

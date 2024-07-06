@@ -20,6 +20,7 @@ function ForgotPassword() {
   const [newPasswordError, setNewPasswordError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigateTo = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL; // use environment variable
 
   const handleSubmit = async () => {
     if (!email || !otp || !newPassword) {
@@ -32,7 +33,7 @@ function ForgotPassword() {
     setIsSubmitting(true);
 
     try {
-      await axios.post('http://localhost:5000/verify-otp', { email, otp, newPassword });
+      await axios.post(`${backendUrl}/verify-otp`, { email, otp, newPassword });
       setIsSubmitting(false);
       navigateTo('/login');
     } catch (error) {

@@ -4,7 +4,7 @@ import PesutImage from "../assets/pesut.png";
 import Form from 'react-bootstrap/Form';
 import axios from "axios";
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom'; // tambahkan ini
+import { useNavigate } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode'; // perbaiki impor ini
 
 const CekURLPage = () => {
@@ -12,8 +12,9 @@ const CekURLPage = () => {
     const [name, setName] = useState('');
     const [token, setToken] = useState('');
     const [expire, setExpire] = useState('');
-    const [role, setRole] = useState(''); // tambahkan ini
+    const [role, setRole] = useState('');
     const navigateTo = useNavigate();
+    const backendUrl = import.meta.env.VITE_BACKEND_URL; // gunakan environment variable
 
     useEffect(() => {
         refreshToken();
@@ -21,14 +22,14 @@ const CekURLPage = () => {
 
     const refreshToken = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/token');
+            const response = await axios.get(`${backendUrl}/token`);
             setToken(response.data.accessToken);
             const decoded = jwtDecode(response.data.accessToken);
             setName(decoded.name);
             setExpire(decoded.exp);
-            setRole(decoded.role); // tambahkan ini
-            if (decoded.role === 1) { // tambahkan ini
-                navigateTo('/admin'); // tambahkan ini
+            setRole(decoded.role);
+            if (decoded.role === 1) {
+                navigateTo('/admin');
             }
         } catch (error) {
             if (error) {
@@ -42,15 +43,15 @@ const CekURLPage = () => {
     axiosJWT.interceptors.request.use(async (config) => {
         const currentDate = new Date();
         if (expire * 1000 < currentDate.getTime()) {
-            const response = await axios.get('http://localhost:5000/token');
-            config.headers.Authorization = `bearer ${response.data.accessToken}`;
+            const response = await axios.get(`${backendUrl}/token`);
+            config.headers.Authorization = `Bearer ${response.data.accessToken}`;
             setToken(response.data.accessToken);
             const decoded = jwtDecode(response.data.accessToken);
             setName(decoded.name);
             setExpire(decoded.exp);
-            setRole(decoded.role); // tambahkan ini
-            if (decoded.role === 1) { // tambahkan ini
-                navigateTo('/admin'); // tambahkan ini
+            setRole(decoded.role);
+            if (decoded.role === 1) {
+                navigateTo('/admin');
             }
         }
         return config
@@ -60,7 +61,7 @@ const CekURLPage = () => {
 
     const handleIdentifikasi = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/cek-url', {
+            const response = await axios.post(`${backendUrl}/cek-url`, {
                 url: url
             }, {
                 headers: {
@@ -78,7 +79,7 @@ const CekURLPage = () => {
                     icon: 'info',
                     confirmButtonText: 'OK'
                 }).then(() => {
-                    setUrl(''); // Mengatur nilai input kembali kosong setelah pengguna mengklik OK
+                    setUrl('');
                 });
             } else {
                 Swal.fire({

@@ -14,6 +14,7 @@ import {
 } from 'mdb-react-ui-kit';
 
 const MySwal = withReactContent(Swal);
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function Login() {
   const navigateTo = useNavigate();
@@ -51,7 +52,7 @@ function Login() {
       preConfirm: async (email) => {
         try {
           setIsSubmittingOTP(true); // Mulai loading saat pengiriman OTP dimulai
-          await axios.post('http://localhost:5000/request-otp', { email });
+          await axios.post(`${BACKEND_URL}/request-otp`, { email });
           setIsSubmittingOTP(false); // Berhenti loading setelah pengiriman OTP berhasil
           return email;
         } catch (error) {
@@ -79,7 +80,7 @@ function Login() {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/masuk', { email, password });
+      const response = await axios.post(`${BACKEND_URL}/masuk`, { email, password });
       const { accessToken } = response.data;
       localStorage.setItem('accessToken', accessToken);
       setIsSubmitting(false);

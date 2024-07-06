@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { semua } from "../data.js";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";
+import {jwtDecode} from "jwt-decode"; // corrected import from 'jwt-decode'
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import TupaiImage from "../assets/Tupai.png";
@@ -12,8 +12,8 @@ const HomePage = () => {
   const [token, setToken] = useState('');
   const [expire, setExpire] = useState('');
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState(''); // Tambahkan state untuk role
   const navigateTo = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL; // use environment variable
 
   useEffect(() => {
     refreshToken();
@@ -21,15 +21,11 @@ const HomePage = () => {
 
   const refreshToken = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/token');
+      const response = await axios.get(`${backendUrl}/token`);
       setToken(response.data.accessToken);
       const decoded = jwtDecode(response.data.accessToken);
       setName(decoded.name);
       setExpire(decoded.exp);
-      setRole(decoded.role); // Simpan role pengguna
-      if (decoded.role === 1) { // Periksa apakah pengguna adalah admin
-        navigateTo('/admin'); // Arahkan admin ke halaman admin
-      }
     } catch (error) {
       if (error) {
         navigateTo('/login');
@@ -42,16 +38,12 @@ const HomePage = () => {
   axiosJWT.interceptors.request.use(async (config) => {
     const currentDate = new Date();
     if (expire * 1000 < currentDate.getTime()) {
-      const response = await axios.get('http://localhost:5000/token');
+      const response = await axios.get(`${backendUrl}/token`);
       config.headers.Authorization = `Bearer ${response.data.accessToken}`;
       setToken(response.data.accessToken);
       const decoded = jwtDecode(response.data.accessToken);
       setName(decoded.name);
       setExpire(decoded.exp);
-      setRole(decoded.role); // Simpan role pengguna
-      if (decoded.role === 1) { // Periksa apakah pengguna adalah admin
-        navigateTo('/admin'); // Arahkan admin ke halaman admin
-      }
     }
     return config;
   }, (error) => {
@@ -61,14 +53,14 @@ const HomePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosJWT.post('http://localhost:5000/cek-email', { email });
+      const response = await axiosJWT.post(`${backendUrl}/cek-email`, { email });
       const { message, data } = response.data;
       let alertText = `<div style="margin-top: 10px;">${message}</div>`;
       if (data && data.length > 0) {
         alertText += '<div style="margin-top: 20px; font-weight: bold;">Web yang terindikasi membocorkan data anda :</div>';
         alertText += '<div style="margin-top: 20px;" class="list_breach_web">';
         data.forEach(breach => {
-          alertText += `<div style="margin-top: 20px;>${breach.Name}</div>`;
+          alertText += `<div style="margin-top: 20px;">${breach.Name}</div>`;
         });
         alertText += '</div>';
       }
@@ -92,7 +84,7 @@ const HomePage = () => {
       });
     }
   };
-  
+
   return (
     <div className="homepage">
       <header className="w-100 min-vh-100 d-flex align-items-center overflow-hidden">
@@ -122,7 +114,7 @@ const HomePage = () => {
                 </div>
               </form>
             </Col>
-            <Col lg="6" className="pt-lg-0 pt-5 " >
+            <Col lg="6" className="pt-lg-0 pt-5">
                <img src={TupaiImage} alt="hero_img" className="animate__animated animate__zoomInUp" />
              </Col>
           </Row>
@@ -145,7 +137,7 @@ const HomePage = () => {
                 <Col key={kelas.id} data-aos="flip-left" data-aos-duration="1000" data-aos-delay={kelas.delay}>
                   <img src={kelas.image} alt="" className="mb-5 rounded-5" />
                   <h5 className="mb-3 px-3 text-center fw-bold">{kelas.title}</h5>
-                  <p className="text-center ">{kelas.desc}</p>
+                  <p className="text-center">{kelas.desc}</p>
                   <div className="ket d-flex justify-content-center">
                     <button className="btn btn-outline-dark rounded-3" onClick={handleButtonClick}>{kelas.buy}</button>
                   </div>
