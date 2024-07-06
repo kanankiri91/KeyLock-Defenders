@@ -1,1 +1,2 @@
 server/controller/links.json filter=lfs diff=lfs merge=lfs -text
+server/controller/ALL-phishing-links.txt filter=lfs diff=lfs merge=lfs -text
