@@ -19,7 +19,7 @@ const store = new sessionStore({
 });
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Ganti dengan URL frontend Anda
+    origin: process.env.BASE_URL, // Mengambil BASE_URL dari .env
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Metode HTTP yang diizinkan
     allowedHeaders: ['Content-Type', 'Authorization'], // Header yang diizinkan
     credentials: true // Mengizinkan pengiriman cookies dalam permintaan
@@ -40,5 +40,5 @@ app.use((req, res, next) => {
 // store.sync();
 
 app.listen(process.env.APP_PORT, () => {
-    console.log('Server sedang berjalan');
+    console.log(`Server sedang berjalan di port ${process.env.APP_PORT}`);
 });
