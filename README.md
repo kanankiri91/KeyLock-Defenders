@@ -21,7 +21,7 @@ PASTIKAN ANDA SUDAH MENGINSTAL NODE JS DAN NPM PADA https://nodejs.org/ DAN JUGA
 
    ```bash
    npm run dev
-Frontend akan berjalan di http://localhost:3000.
+Frontend akan berjalan di http://localhost
 
 ### Backend (Node.js)
 
@@ -39,7 +39,7 @@ Frontend akan berjalan di http://localhost:3000.
 
    ```bash
    node server.js
-Backend akan berjalan di http://localhost:5000.
+Backend akan berjalan di http://localhost
 
 ### Machine Learning (Python)
 
