@@ -1,6 +1,6 @@
-# Nama Proyek Anda
+# KeyLock Defenders
 
-Deskripsi singkat tentang proyek Anda.
+proyek sederhana dari orang sederhana. Selamat menggunakan !!
 
 ## Instalasi
 
@@ -9,52 +9,52 @@ Deskripsi singkat tentang proyek Anda.
 1. Masuk ke direktori frontend:
    ```bash
    cd path/to/frontend
-Instal dependencies menggunakan npm:
 
-bash
-Copy code
-npm install
-Jalankan server pengembangan frontend:
+2. Instal dependencies menggunakan npm:
 
-bash
-Copy code
-npm run dev
+   ```bash
+   npm install
+
+3. Jalankan server pengembangan frontend:
+
+   ```bash
+   npm run dev
 Frontend akan berjalan di http://localhost:3000.
 
-Backend (Node.js)
-Masuk ke direktori backend:
+### Backend (Node.js)
 
-bash
-Copy code
-cd path/to/backend
-Instal dependencies menggunakan npm:
+1. Masuk ke direktori backend:
 
-bash
-Copy code
-npm install
-Jalankan server backend:
+   ```bash
+   cd path/to/backend
 
-bash
-Copy code
-npm start
+2. Instal dependencies menggunakan npm:
+
+   ```bash
+   npm install
+
+3. Jalankan server backend:
+
+   ```bash
+   node server.js
 Backend akan berjalan di http://localhost:5000.
 
-Machine Learning (Python)
-Pastikan Anda memiliki Python dan pip terinstal.
+### Machine Learning (Python)
 
-Masuk ke direktori ML:
+1. Pastikan Anda memiliki Python dan pip terinstal.
 
-bash
-Copy code
-cd path/to/ml
-Instal dependencies menggunakan pip:
+2. Masuk ke direktori ML:
 
-bash
-Copy code
-pip install -r requirements.txt
-Jalankan skrip Python untuk proyek machine learning:
+   ```bash
+   cd path/to/ml
 
-bash
-Copy code
-python main.py
-Sesuaikan main.py dengan nama skrip utama proyek Anda.
+3. Instal dependencies menggunakan pip:
+
+   ```bash
+   pip install -r requirements.txt
+
+4. Jalankan skrip Python untuk proyek machine learning:
+
+   ```bash
+   python main.py
+
