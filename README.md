@@ -4,11 +4,13 @@ proyek sederhana dari orang sederhana. Selamat menggunakan !!
 
 ## Instalasi
 
+PASTIKAN ANDA SUDAH MENGINSTAL NODE JS DAN NPM PADA https://nodejs.org/ DAN JUGA PYTHON DAN PIP PADA https://www.python.org/
+
 ### Frontend (Vite + React)
 
 1. Masuk ke direktori frontend:
    ```bash
-   cd path/to/frontend
+   cd KeyLock-Defenders/client
 
 2. Instal dependencies menggunakan npm:
 
@@ -26,7 +28,7 @@ Frontend akan berjalan di http://localhost:3000.
 1. Masuk ke direktori backend:
 
    ```bash
-   cd path/to/backend
+   cd KeyLock-Defenders/server
 
 2. Instal dependencies menggunakan npm:
 
@@ -46,7 +48,7 @@ Backend akan berjalan di http://localhost:5000.
 2. Masuk ke direktori ML:
 
    ```bash
-   cd path/to/ml
+   cd KeyLock-Defenders/machine-learning
 
 3. Instal dependencies menggunakan pip:
 
@@ -56,5 +58,5 @@ Backend akan berjalan di http://localhost:5000.
 4. Jalankan skrip Python untuk proyek machine learning:
 
    ```bash
-   python main.py
+   python app.py
 
