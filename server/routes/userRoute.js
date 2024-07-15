@@ -5,7 +5,7 @@ import { verifyUser } from "../middleware/AuthUser.js";
 import { dataPemeriksaanAkun } from "../controller/pemeriksaan.js";
 import { checkUrl } from "../controller/pengecekanURL.js";
 import { checkEmail } from "../controller/periksaEmail.js";
-import { performChecks, checkResults } from "../utils/otomatisEmail.js";
+import { performChecks, checkResults, checkInformasiWeb } from "../utils/otomatisEmail.js";
 import { getBreachInfoByEmailAndWhatsApp, updateKeterangan } from "../controller/breachInfoController.js";
 import { getUserProfile, updateEmail, updateFullname, updatePassword } from "../controller/UserProfileController.js";
 
@@ -29,6 +29,7 @@ router.get('/pengecekan', async (req, res) => {
   try {
     await performChecks();
     await checkResults();
+    await checkInformasiWeb();
     res.send('Pengecekan selesai.');
   } catch (error) {
     res.status(500).send('Terjadi kesalahan saat pengecekan.');
