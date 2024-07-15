@@ -19,7 +19,7 @@ const store = new sessionStore({
 });
 
 app.use(cors({
-    origin: process.env.BASE_URL, // Mengambil BASE_URL dari .env
+    origin: 'http://localhost:5173', // Mengambil BASE_URL dari .env
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Metode HTTP yang diizinkan
     allowedHeaders: ['Content-Type', 'Authorization'], // Header yang diizinkan
     credentials: true // Mengizinkan pengiriman cookies dalam permintaan
