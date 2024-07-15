@@ -14,8 +14,6 @@ const CekPasswordPage = () => {
     const [token, setToken] = useState('');
     const [expire, setExpire] = useState('');
     const [role, setRole] = useState('');
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
-    const mlUrl = import.meta.env.VITE_ML_URL;
     const navigateTo = useNavigate();
 
     useEffect(() => {
@@ -24,7 +22,7 @@ const CekPasswordPage = () => {
 
     const refreshToken = async () => {
         try {
-            const response = await axios.get(`${backendUrl}/token`);
+            const response = await axios.get(`http://localhost:5000/token`);
             setToken(response.data.accessToken);
             const decoded = jwtDecode(response.data.accessToken);
             setName(decoded.name);
@@ -45,7 +43,7 @@ const CekPasswordPage = () => {
     axiosJWT.interceptors.request.use(async (config) => {
         const currentDate = new Date();
         if (expire * 1000 < currentDate.getTime()) {
-            const response = await axios.get(`${backendUrl}/token`);
+            const response = await axios.get(`http://localhost:5000/token`);
             config.headers.Authorization = `bearer ${response.data.accessToken}`;
             setToken(response.data.accessToken);
             const decoded = jwtDecode(response.data.accessToken);
@@ -63,7 +61,7 @@ const CekPasswordPage = () => {
 
     const handleIdentifikasi = async () => {
         try {
-            const response = await axios.post(`${mlUrl}/cek-password`, { user_password: password }, { withCredentials: true });
+            const response = await axios.post('http://localhost:9696/cek-password', { user_password: password }, { withCredentials: true });
             const passwordStrength = response.data.password_strength;
             let message = '';
             let icon = '';

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { semua } from "../data.js";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode"; // corrected import from 'jwt-decode'
+import {jwtDecode} from "jwt-decode"; // corrected import
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import TupaiImage from "../assets/Tupai.png";
@@ -13,7 +13,6 @@ const HomePage = () => {
   const [expire, setExpire] = useState('');
   const [email, setEmail] = useState('');
   const navigateTo = useNavigate();
-  const backendUrl = import.meta.env.VITE_BACKEND_URL; // use environment variable
 
   useEffect(() => {
     refreshToken();
@@ -21,11 +20,16 @@ const HomePage = () => {
 
   const refreshToken = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/token`);
+      const response = await axios.get(`http://localhost:5000/token`);
       setToken(response.data.accessToken);
       const decoded = jwtDecode(response.data.accessToken);
       setName(decoded.name);
       setExpire(decoded.exp);
+      
+      // Check user role and redirect if admin
+      if (decoded.role === 1) {
+        navigateTo('/admin');
+      }
     } catch (error) {
       if (error) {
         navigateTo('/login');
@@ -38,12 +42,17 @@ const HomePage = () => {
   axiosJWT.interceptors.request.use(async (config) => {
     const currentDate = new Date();
     if (expire * 1000 < currentDate.getTime()) {
-      const response = await axios.get(`${backendUrl}/token`);
+      const response = await axios.get(`http://localhost:5000/token`);
       config.headers.Authorization = `Bearer ${response.data.accessToken}`;
       setToken(response.data.accessToken);
       const decoded = jwtDecode(response.data.accessToken);
       setName(decoded.name);
       setExpire(decoded.exp);
+
+      // Check user role and redirect if admin
+      if (decoded.role === 1) {
+        navigateTo('/admin');
+      }
     }
     return config;
   }, (error) => {
@@ -53,7 +62,7 @@ const HomePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosJWT.post(`${backendUrl}/cek-email`, { email });
+      const response = await axiosJWT.post(`http://localhost:5000/cek-email`, { email });
       const { message, data } = response.data;
       let alertText = `<div style="margin-top: 10px;">${message}</div>`;
       if (data && data.length > 0) {

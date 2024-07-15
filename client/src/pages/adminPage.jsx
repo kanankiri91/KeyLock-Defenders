@@ -13,7 +13,6 @@ const AdminPage = () => {
     const [isRefreshing, setIsRefreshing] = useState(false); // State untuk indikator refresh
     const [role, setRole] = useState(''); // State untuk role
     const navigate = useNavigate();
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
         verifyRole();
@@ -21,7 +20,7 @@ const AdminPage = () => {
 
     const verifyRole = async () => {
         try {
-            const response = await axios.get(`${backendUrl}/token`);
+            const response = await axios.get(`http://localhost:5000/token`);
             const decoded = jwtDecode(response.data.accessToken);
             setRole(decoded.role);
             if (decoded.role !== 1) {
@@ -59,7 +58,7 @@ const AdminPage = () => {
     const fetchAllUsers = async () => {
         setIsLoading(true); // Aktifkan loading sebelum fetch data
         try {
-            const response = await axios.get(`${backendUrl}/pengguna`);
+            const response = await axios.get(`http://localhost:5000/pengguna`);
             setData(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -71,7 +70,7 @@ const AdminPage = () => {
     const fetchAllCheckingEmails = async () => {
         setIsLoading(true); // Aktifkan loading sebelum fetch data
         try {
-            const response = await axios.get(`${backendUrl}/tampilkan-email`);
+            const response = await axios.get(`http://localhost:5000/tampilkan-email`);
             setData(response.data);
         } catch (error) {
             console.error('Error fetching checking emails:', error);
@@ -91,7 +90,7 @@ const AdminPage = () => {
 
     const handleActivateUser = async (id) => {
         try {
-            await axios.put(`${backendUrl}/pengguna/activate/${id}`);
+            await axios.put(`http://localhost:5000/pengguna/activate/${id}`);
             handleSelectOption('pengguna');
         } catch (error) {
             console.error('Error activating user:', error);
@@ -100,7 +99,7 @@ const AdminPage = () => {
 
     const handleDeactivateUser = async (id) => {
         try {
-            await axios.put(`${backendUrl}/pengguna/deactivate/${id}`);
+            await axios.put(`http://localhost:5000/pengguna/deactivate/${id}`);
             handleSelectOption('pengguna');
         } catch (error) {
             console.error('Error deactivating user:', error);
@@ -109,7 +108,7 @@ const AdminPage = () => {
 
     const handleDeleteAkun = async (id) => {
         try {
-            await axios.delete(`${backendUrl}/tampilkan-email/${id}`);
+            await axios.delete(`http://localhost:5000/tampilkan-email/${id}`);
             handleSelectOption('tampilkan-email');
         } catch (error) {
             console.error('Error deleting account:', error);
@@ -119,7 +118,7 @@ const AdminPage = () => {
     const handlePengecekanAkun = async () => {
         setIsLoading(true); // Aktifkan loading sebelum melakukan pengecekan
         try {
-            const response = await axios.get(`${backendUrl}/pengecekan`);
+            const response = await axios.get(`http://localhost:5000/pengecekan`);
             console.log(response.data); // Log response for confirmation message
         } catch (error) {
             console.error('Error saat melakukan pengecekan:', error);
@@ -140,7 +139,7 @@ const AdminPage = () => {
 
     const handleLogout = async () => {
         try {
-            await axios.delete(`${backendUrl}/keluar`);
+            await axios.delete(`http://localhost:5000/keluar`);
             navigate('/login');
         } catch (error) {
             console.error('Error logging out:', error);

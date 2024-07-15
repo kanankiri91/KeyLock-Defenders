@@ -14,21 +14,20 @@ import {
 } from 'mdb-react-ui-kit';
 
 const MySwal = withReactContent(Swal);
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function Login() {
   const navigateTo = useNavigate();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittingOTP, setIsSubmittingOTP] = useState(false);
-  const [emailError, setEmailError] = useState('');
+  const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const handleChangeEmail = (e) => {
+  const handleChangeUsername = (e) => {
     const { value } = e.target;
-    setEmail(value);
-    setEmailError(value ? '' : 'Email is required');
+    setUsername(value);
+    setUsernameError(value ? '' : 'Username is required');
   };
 
   const handleChangePassword = (e) => {
@@ -52,7 +51,7 @@ function Login() {
       preConfirm: async (email) => {
         try {
           setIsSubmittingOTP(true); // Mulai loading saat pengiriman OTP dimulai
-          await axios.post(`${BACKEND_URL}/request-otp`, { email });
+          await axios.post('http://localhost:5000/request-otp', { email });
           setIsSubmittingOTP(false); // Berhenti loading setelah pengiriman OTP berhasil
           return email;
         } catch (error) {
@@ -72,22 +71,33 @@ function Login() {
   };
 
   const handleSubmit = async () => {
-    if (!email || !password) {
-      alert('Email and password are required.');
+    if (!username || !password) {
+      alert('Username and password are required.');
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post(`${BACKEND_URL}/masuk`, { email, password });
-      const { accessToken } = response.data;
+      const response = await axios.post('http://localhost:5000/masuk', { username, password });
+      const { accessToken, msg } = response.data;
       localStorage.setItem('accessToken', accessToken);
       setIsSubmitting(false);
-      navigateTo('/beranda');
+      
+      // Decode JWT token to get the role
+      const decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
+      const userRole = decodedToken.role;
+
+      if (userRole === 1) {
+        navigateTo('/admin');
+      } else if (userRole === 2) {
+        navigateTo('/beranda');
+      } else {
+        alert('Unknown role');
+      }
     } catch (error) {
       setIsSubmitting(false);
-      alert('Login failed. Please check your email and password.');
+      alert('Login failed. Please check your username and password.');
       console.error(error);
     }
   };
@@ -101,10 +111,10 @@ function Login() {
               <h1 className="fw-bold m-0 mb-2 pb-3">
                 <Link to="/beranda" className="text-decoration-none text-light">KeyLock</Link>
               </h1>
-              <p className="text-white-50 mb-5 mt-3 text-center fw-lighter">Masukkan email dan password-mu!</p>
+              <p className="text-white-50 mb-5 mt-3 text-center fw-lighter">Masukkan username dan password-mu!</p>
 
-              <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-white' label='Email address' id='formWhite' type='email' size="lg" value={email} onChange={handleChangeEmail} />
-              {emailError && <div className="text-danger">{emailError}</div>}
+              <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-white' label='Username' id='formWhite' type='text' size="lg" value={username} onChange={handleChangeUsername} />
+              {usernameError && <div className="text-danger">{usernameError}</div>}
               <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-white' label='Password' id='formWhite' type='password' size="lg" value={password} onChange={handleChangePassword} />
               {passwordError && <div className="text-danger">{passwordError}</div>}
 

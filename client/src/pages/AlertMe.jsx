@@ -29,7 +29,6 @@ function AlertMe() {
   const [token, setToken] = useState('');
   const [expire, setExpire] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const navigateTo = useNavigate();
 
@@ -39,7 +38,7 @@ function AlertMe() {
 
   const refreshToken = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/token`);
+      const response = await axios.get(`http://localhost:5000/token`);
       setToken(response.data.accessToken);
       const decoded = jwtDecode(response.data.accessToken);
       setName(decoded.name);
@@ -59,7 +58,7 @@ function AlertMe() {
   axiosJWT.interceptors.request.use(async (config) => {
     const currentDate = new Date();
     if (expire * 1000 < currentDate.getTime()) {
-      const response = await axios.get((`${backendUrl}/token`));
+      const response = await axios.get((`http://localhost:5000/token`));
       config.headers.Authorization = `Bearer ${response.data.accessToken}`;
       setToken(response.data.accessToken);
       const decoded = jwtDecode(response.data.accessToken);
@@ -102,7 +101,7 @@ function AlertMe() {
     setIsSubmitting(true);
 
     try {
-      const response = await axiosJWT.post(`${backendUrl}/masukkan-data`, {
+      const response = await axiosJWT.post(`http://localhost:5000/masukkan-data`, {
         email,
         whatsapp,
         selectedOption

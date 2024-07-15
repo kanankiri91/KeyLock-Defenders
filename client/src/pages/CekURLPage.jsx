@@ -14,7 +14,6 @@ const CekURLPage = () => {
     const [expire, setExpire] = useState('');
     const [role, setRole] = useState('');
     const navigateTo = useNavigate();
-    const backendUrl = import.meta.env.VITE_BACKEND_URL; // gunakan environment variable
 
     useEffect(() => {
         refreshToken();
@@ -22,7 +21,7 @@ const CekURLPage = () => {
 
     const refreshToken = async () => {
         try {
-            const response = await axios.get(`${backendUrl}/token`);
+            const response = await axios.get(`http://localhost:5000/token`);
             setToken(response.data.accessToken);
             const decoded = jwtDecode(response.data.accessToken);
             setName(decoded.name);
@@ -33,7 +32,7 @@ const CekURLPage = () => {
             }
         } catch (error) {
             if (error) {
-                navigateTo('/login')
+                navigateTo('/login');
             }
         }
     }
@@ -43,7 +42,7 @@ const CekURLPage = () => {
     axiosJWT.interceptors.request.use(async (config) => {
         const currentDate = new Date();
         if (expire * 1000 < currentDate.getTime()) {
-            const response = await axios.get(`${backendUrl}/token`);
+            const response = await axios.get(`http://localhost:5000/token`);
             config.headers.Authorization = `Bearer ${response.data.accessToken}`;
             setToken(response.data.accessToken);
             const decoded = jwtDecode(response.data.accessToken);
@@ -61,7 +60,7 @@ const CekURLPage = () => {
 
     const handleIdentifikasi = async () => {
         try {
-            const response = await axios.post(`${backendUrl}/cek-url`, {
+            const response = await axios.post(`http://localhost:5000/cek-url`, {
                 url: url
             }, {
                 headers: {
