@@ -2,11 +2,12 @@ import jwt from "jsonwebtoken";
 import Users from "../model/UserModel.js";
 import argon2 from "argon2";
 
+// Backend Controller
 export const Login = async (req, res) => {
     try {
         const user = await Users.findOne({
             where: {
-                email: req.body.email
+                username: req.body.username
             }
         });
 
@@ -24,8 +25,9 @@ export const Login = async (req, res) => {
         const name = user.fullname;
         const email = user.email;
         const role = user.role;
-        const accessToken = jwt.sign({ userId, name, email, role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
-        const refreshToken = jwt.sign({ userId, name, email, role }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
+        const username = user.username;
+        const accessToken = jwt.sign({ userId, name, email, role, username }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
+        const refreshToken = jwt.sign({ userId, name, email, role, username }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
 
         await Users.update({ refresh_token: refreshToken }, {
             where: {
@@ -46,6 +48,7 @@ export const Login = async (req, res) => {
         res.status(500).json({ msg: "Terjadi kesalahan pada server" });
     }
 };
+
 
 
 export const refreshToken = async (req, res) => {
